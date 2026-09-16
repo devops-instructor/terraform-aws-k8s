@@ -83,7 +83,7 @@
     - name: Instalar Headlamp
       command:
         cmd: k3s kubectl apply -f -
-        stdin: "{{ lookup('file', 'headlamp.yaml') }}"
+        stdin: "{{ lookup('file', 'k3s-headlamp.yaml') }}"
       register: headlamp_install
       changed_when: >
         'created' in headlamp_install.stdout or
