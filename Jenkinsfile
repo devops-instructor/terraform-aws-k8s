@@ -67,7 +67,10 @@ pipeline {
                     reuseNode true
                 }
             }
-
+            environment {
+                HOME = "${WORKSPACE}"
+                ANSIBLE_HOST_KEY_CHECKING = 'False'
+            }
             steps {
                 sshagent(credentials: ['k8s-keypair']) {
                     sh '''
