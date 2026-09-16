@@ -51,6 +51,7 @@ pipeline {
 
             steps {
                 sh 'terraform apply -auto-approve'
+                sh 'cat inventory.ini'
             }
         }
 
@@ -59,9 +60,19 @@ pipeline {
                 expression { params.action == 'apply' }
             }
 
+            agent {
+                docker {
+                    image 'alpine/ansible:2.21.0'
+                    args '--entrypoint=""'
+                    reuseNode true
+                }
+            }
+
             steps {
                 sshagent(credentials: ['k8s-keypair']) {
                     sh '''
+                        ansible --version
+
                         export ANSIBLE_HOST_KEY_CHECKING=False
 
                         ansible-playbook \
