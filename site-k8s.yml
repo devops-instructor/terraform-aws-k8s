@@ -89,6 +89,14 @@
         'created' in headlamp_install.stdout or
         'configured' in headlamp_install.stdout
 
+    - name: Esperar creación de Headlamp
+      command: k3s kubectl get deployment headlamp -n headlamp
+      register: headlamp_deployment
+      retries: 30
+      delay: 5
+      until: headlamp_deployment.rc == 0
+      changed_when: false
+
     - name: Esperar Headlamp
       command: >
         k3s kubectl wait
