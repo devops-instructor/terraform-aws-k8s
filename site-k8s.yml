@@ -57,12 +57,12 @@
   become: true
 
   tasks:
-    - name: Esperar Worker
-      command: k3s kubectl get nodes
-      register: nodes
+    - name: Esperar Workers
+      shell: k3s kubectl get nodes --no-headers | grep -c " Ready "
+      register: ready_nodes
       retries: 20
       delay: 5
-      until: "'k3s-worker' in nodes.stdout"
+      until: ready_nodes.stdout | int >= (groups['k3s_workers'] | length + 1)
       changed_when: false
 
     - name: Mostrar nodos
