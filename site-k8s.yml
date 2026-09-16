@@ -6,7 +6,7 @@
   pre_tasks:
     - name: Esperar conexión SSH
       wait_for_connection:
-        delay: 15
+        delay: 20
         timeout: 180
 
   tasks:
@@ -40,6 +40,7 @@
   pre_tasks:
     - name: Esperar conexión SSH
       wait_for_connection:
+        delay: 20
         timeout: 180
 
   tasks:
