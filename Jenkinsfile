@@ -63,7 +63,7 @@ pipeline {
             agent {
                 docker {
                     image 'alpine/ansible:2.21.0'
-                    args '--entrypoint=""'
+                    args '-u root:root'
                     reuseNode true
                 }
             }
