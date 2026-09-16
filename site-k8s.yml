@@ -49,7 +49,8 @@
         K3S_TOKEN="{{ hostvars[groups['k3s_server'][0]].k3s_token }}" \
         sh -
       args:
-        creates: /usr/local/bin/k3s-agent
+        # creates: /usr/local/bin/k3s-agent
+        creates: /etc/systemd/system/k3s-agent.service
 
 
 - name: Validar cluster
@@ -73,3 +74,35 @@
     - name: Resultado
       debug:
         var: nodes.stdout_lines
+
+- name: Instalar Headlamp
+  hosts: k3s_server
+  become: true
+
+  tasks:
+    - name: Instalar Headlamp
+      command:
+        cmd: k3s kubectl apply -f -
+        stdin: "{{ lookup('file', 'headlamp.yaml') }}"
+      register: headlamp_install
+      changed_when: >
+        'created' in headlamp_install.stdout or
+        'configured' in headlamp_install.stdout
+
+    - name: Esperar Headlamp
+      command: >
+        k3s kubectl wait
+        --namespace=headlamp
+        --for=condition=Available
+        deployment/headlamp
+        --timeout=180s
+      changed_when: false
+
+    - name: Mostrar Headlamp
+      command: k3s kubectl get pods,svc -n headlamp
+      register: headlamp
+      changed_when: false
+
+    - name: Resultado Headlamp
+      debug:
+        var: headlamp.stdout_lines
