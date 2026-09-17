@@ -1,6 +1,6 @@
 # K3s Server
 resource "aws_instance" "k3s_server" {
-  ami           = "ami-096f5760b00bcd95c"
+  ami           = "ami-096f5760b00bcd95c" # Ubuntu Server 24.04 LTS
   instance_type = "t3.small"
   key_name      = "k8s-keypair"
 
@@ -15,7 +15,7 @@ resource "aws_instance" "k3s_server" {
 resource "aws_instance" "k3s_worker" {
   count = 1
 
-  ami           = "ami-096f5760b00bcd95c"
+  ami           = "ami-096f5760b00bcd95c" # Ubuntu Server 24.04 LTS
   instance_type = "t3.small"
   key_name      = "k8s-keypair"
 
